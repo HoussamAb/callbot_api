@@ -92,73 +92,80 @@
     </style>
 </head>
 <body>
-<div class="wrapper">
-{% if messages %}
-    {% for message in messages %}
-        <div>
-            <!--                | means OR operator-->
-            <strong>{{message|safe}}</strong>
-        </div>
-    {% endfor %}
-    <br><button type="button" onclick="this.redirect('/addcsv');">Retour</button>
-{% else %}
+    <div class="wrapper">
+    {% if messages %}
+        {% for message in messages %}
+            <div>
+                <!--                | means OR operator-->
+                <strong>{{message|safe}}</strong>
+            </div>
+        {% endfor %}
+        <br><button type="button" onclick="this.redirect('/addcsv');">Retour</button>
+    {% else %}
 
-    <form action="./" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div id="FileUpload">
-            <div class="wrapper">
-                <div class="upload">
-                    <p>{{order}}</p>
-                    <button type="button"><input type="file" name="file"><span class="upload__button"></span></button>
-                    <button type="submit"><span class="upload__button">submit</span></button>
-                </div>
-                <div class="uploaded uploaded--one">
-                    <i class="far fa-file-pdf"></i>
-                    <div class="file">
-                        <div class="file__name">
-                            <p>lorem_ipsum.pdf</p>
-                            <i class="fas fa-times"></i>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width:100%"></div>
+        <form action="./" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div id="FileUpload">
+                <div class="wrapper">
+                    <div class="upload">
+                        <p>{{order}}</p>
+                        <button type="button"><input type="file" name="file"><span class="upload__button"></span></button>
+                        <button type="submit"><span class="upload__button">submit</span></button>
+                    </div>
+                    <div class="uploaded uploaded--one">
+                        <i class="far fa-file-pdf"></i>
+                        <div class="file">
+                            <div class="file__name">
+                                <p>lorem_ipsum.pdf</p>
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
 
-{% endif %}
-<div class="col-lg-12 center">
-<table id="example" class="display" style="width:100%">
-    <thead>
-    <tr>
-        <th>Questions</th>
-        <th>réponses</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for profile in profiles %}
+    {% endif %}
+    <div class="col-lg-12 center">
+    <table id="example" class="display" style="width:100%">
+        <thead>
         <tr>
-            <td>{{profile.questions}}</td>
-            <td>{{profile.reponses}}</td>
+            <th>Questions</th>
+            <th>réponses</th>
         </tr>
-    {% endfor %}
-    </tbody>
-    <tfoot>
-    <tr>
-        <th>questions</th>
-        <th>réponses</th>
-    </tr>
-    </tfoot>
-</table>
-</div>
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script>$(document).ready(function() {
-    $('#example').DataTable(
-        { "lengthMenu": [[3, 5, 10, 25, 50, -1], [10, 25, 50, "All"]]}
-    );
-} );</script>
+        </thead>
+        <tbody>
+        {% for profile in profiles %}
+            <tr>
+                <td>{{profile.questions}}</td>
+                <td>{{profile.reponses}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>questions</th>
+            <th>réponses</th>
+        </tr>
+        </tfoot>
+    </table>
+    </div>
+    <div>
+        {% if trained %}
+            {{ trained }}
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable(
+                { "lengthMenu": [[3, 5, 10, 25, 50, -1], [10, 25, 50, "All"]]}
+            );
+        });
+    </script>
 </body>
 </html>
