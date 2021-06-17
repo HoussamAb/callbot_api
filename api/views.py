@@ -52,18 +52,18 @@ class api(View):
             }
             return render(request, template, prompt)
         data_set = csv_file.read().decode('ansi')
-        #with open('data/dataset.csv', 'w' , encoding='ansi') as output:
+        # with open('data/dataset.csv', 'w' , encoding='ansi') as output:
         #    output.write(data_set)
         # setup a stream which is when we loop through each line we are able to handle a data in a stream
         io_string = io.StringIO(data_set)
         next(io_string)
         with open('data/dataset.csv', 'w', encoding='ansi', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=';', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(["Questions","Reponses"])
+            writer.writerow(["Questions", "Reponses"])
             for column in csv.reader(io_string, delimiter=';'):
-                writer.writerow([column[0],column[1]])
+                writer.writerow([column[0], column[1]])
 
-        #for column in csv.reader(io_string, delimiter=';'):
+        # for column in csv.reader(io_string, delimiter=';'):
         #    _, created = apimodel.objects.update_or_create(
         #        questions=column[0],
         #        reponses=column[1],
@@ -73,6 +73,39 @@ class api(View):
 
     def get(self, request):
         if request.GET.get("action"):
+            if request.GET.get("action") == "train":
+                from sklearn.ensemble import RandomForestClassifier
+                df = ml.FilesManager.loadDataSet(self, fullpath='./data/dataset.csv')
+                split_data = ml.SplitDataset(df)
+                split_data.split(testSize=20, RandomStat=42)
+                training = ml.TrainModel(RandomForestClassifier(), split_data.dataset["Questions"],
+                                         split_data.dataset["Reponses"])
+                model = training.train()
+                metric = ml.metrics(model, split_data.getTest())
+
+
+                template = "csv_loader.html"
+                # data = apimodel.objects.all()
+                # prompt is a context variable that can have different values      depending on their context
+                prompt = {
+                    'order': 'Order of the CSV should be Questions, responses',
+                    'profiles': None,
+                    'trained': metric.modelScore()
+                }
+                # GET request returns the value of the data with the specified key.
+                return render(request, template, prompt)
+            # ~~~~~~~~~~~~~~~~~~~~~~~~ UPLOAD PAGE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+            if request.GET.get("action") == "uploadDataset":
+                template = "pages/uploadFiles.html"
+                # data = apimodel.objects.all()
+                # prompt is a context variable that can have different values      depending on their context
+                prompt = {
+                    'order': 'Order of the CSV should be Questions, responses',
+                    'profiles': None,
+                }
+                # GET request returns the value of the data with the specified key.
+                return render(request, template, prompt)
+
             template = "csv_loader.html"
             data = apimodel.objects.all()
             # prompt is a context variable that can have different values      depending on their context
@@ -82,22 +115,12 @@ class api(View):
             }
             return render(request, template, prompt)
 
-        from sklearn.ensemble import RandomForestClassifier
-        df = ml.FilesManager.loadDataSet(self,fullpath='./data/dataset.csv')
-        split_data = ml.SplitDataset(df)
-        split_data.split(testSize=20,RandomStat=42)
-        training = ml.TrainModel(RandomForestClassifier(),split_data.dataset["Questions"],split_data.dataset["Reponses"])
-        model = training.train()
-        metric = ml.metrics(model,split_data.getTest())
-
-
-        template = "csv_loader.html"
+        template = "pages/dashboard.html"
         # data = apimodel.objects.all()
         # prompt is a context variable that can have different values      depending on their context
         prompt = {
             'order': 'Order of the CSV should be Questions, responses',
             'profiles': None,
-            'trained': metric.modelScore()
         }
         # GET request returns the value of the data with the specified key.
         return render(request, template, prompt)

@@ -5,4 +5,4 @@ from models import api
 class apiSerializer(serializers.ModelSerializer):
     class Meta:
         model = api
-        fields = ["task", "completed", "timestamp", "updated", "user"]
+        fields = ["task", "completed", "timestamp", "updated", "questions","reponses"]

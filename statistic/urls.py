@@ -1,8 +1,8 @@
 from django.urls import path, include
 from django.contrib import admin
 from django.urls import path
-from api.views import api
+from statistic.views import statistic
 
 urlpatterns = [
-    path('callbot/', api.as_view()),
+    path('statistic/', statistic.as_view()),
 ]
