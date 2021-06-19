@@ -45,7 +45,7 @@ class SplitDataset:
 
     def __init__(self, dataset=None):
         if dataset is None:
-            self.dataset = FilesManager.loadDataSet('data/dataset.csv')
+            self.dataset = FilesManager.loadDataSet('data/dataset_train.csv')
         self.dataset = dataset
 
     def split(self, testSize, RandomStat):
@@ -131,8 +131,8 @@ class MakeTest:
         self.df1 = datatest
         self.df2 = dataset
 
-    def predict_statis(self):
-        return self._algo
+    def predict_statis(self, q):
+        return self._algo.predict([q])
 
     def compare_dataframes(self, df1, df2):
         l1 = []
@@ -145,7 +145,7 @@ class MakeTest:
                     l1.append(rowi['Question'])
                     l2.append(rowi['Réponse Inbenta'])
                     l3.append(rowj['Questions'])
-                    l4.append(rowj['Réponses'])
+                    l4.append(rowj['Reponses'])
         df = pd.DataFrame({
             'Questions individu': l1,
             'Question inbenta': l2,
@@ -164,6 +164,24 @@ class MakeTest:
                 label.append(0)
         df['label'] = label
 
+    def moyenneR(self, df):
+        som = 0
+        for i in df.label:
+            if i == 1:
+                som += 1
+        return ((som / len(df)) * 100)
+
+    def moyenne_tempsR(self, df):
+        som = 0
+        result = []
+        numberoftest = len(df['temps de réponse (s)'])
+        # print('Le totale des tests : ', len(df['temps de réponse (s)']))
+        for i in df['temps de réponse (s)']:
+            som += i
+        result.append(numberoftest)
+        result.append((som / len(df)))
+        return result
+
     def moyenne(self, df):
         som = 0
         for i in df.label:
@@ -173,15 +191,17 @@ class MakeTest:
 
     def moyenne_temps(self, df):
         som = 0
-        print('Le totale des tests : ', len(df['temps de réponse (s)']))
+        numberoftest = len(df['temps de réponse (s)'])
+        # print('Le totale des tests : ', len(df['temps de réponse (s)']))
         for i in df['temps de réponse (s)']:
             som += i
-        return "La Moyenne de temps de réponses : %.4f" % (som / len(df))
+        return "La Moyenne de temps de réponses : %.4f \n <br> Le totale des tests : %d" % (
+        (som / len(df), numberoftest))
 
     # 'Questions individu' 'Question vrai'
-    def doTest(self, df1, df2, colomnName):
-        data = self.compare_dataframes(df1, df2)
-
+    def doTest(self, colomnName):
+        data = self.compare_dataframes(self.df1, self.df2)
+        response = []
         test_rep = []
         temps_de_rep = []
         for i in data[colomnName]:
@@ -190,8 +210,10 @@ class MakeTest:
             temps_de_rep.append(time.time() - start_time)
         data['réponce algorithme'] = test_rep
         data['temps de réponse (s)'] = temps_de_rep
-
-        data.head(5)
         self.comp(data)
-        self.moyenne(data)
-        self.moyenne_temps(data)
+        m = self.moyenneR(data)
+        t = self.moyenne_tempsR(data)
+        response.append(m)
+        response.append(t)
+        response.append(data)
+        return response

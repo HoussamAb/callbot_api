@@ -328,18 +328,37 @@
                         <form id="trainingForm" role="form text-left" method="post" action="./">
                             <h6>Training models</h6>
                             <div class="col-12 row">
-                                <div class="col-8 mb-3">
+                                <div class="col-6 mb-3">
                                     <input type="hidden" name="action" value="train">
-                                    <select name="algo" class="form-control" placeholder="select algorithm" form="trainingForm">
-                                        <option value="RF">Random forest</option>
-                                    </select> {% if score %}
-                                    <span class="mb-2 text-xs green">Reponses : Model trained and score is <span class="text-dark font-weight-bold ms-2">
+                                    <label for="train">models</label><select id="train" name="algo" class="form-control"
+                                                                             placeholder="select algorithm"
+                                                                             form="trainingForm">
+                                    <option value="" selected disabled>Select algorithm</option>
+                                    {% if algos %}
+                                        {% for algo in algos %}
+                                            <option value="{{ algo.algoName }}">{{ algo.algoName }}</option>
+                                        {% endfor %}
+                                    {% endif %}                                    </select>
+                                    {% if score %}
 
-                                        {{  score|safe }}%
+                                        <span class="mb-2 text-xs green">Reponses : Model trained and score is <span
+                                                class="text-dark font-weight-bold ms-2">
+
+                                        {{ score|safe }}%
                                         </span></span>{% endif %}
                                 </div>
-                                <div class="col-4 text-center">
-                                    <button  onclick="{this.disabled}" type="submit" class="btn bg-gradient-success w-50 mb-0">Train</button>
+                                <div class="col-2 mb-3">
+                                    <label for="testsize">Test Size</label>
+                                    <input id="testsize" type="number" max="80" min="20" value="20" name="testsize"
+                                           class="form-control" placeholder="select size">
+
+                                </div>
+                                <div class="col-4 text-center" style="margin-top: 30px;">
+                                    <button id="btntrain" disabled="true" onclick="{this.disabled}" type="submit"
+                                            class="btn bg-gradient-success w-50 mb-0">Train
+                                    </button>
+                                    <a class="btn bg-gradient-secondary w-35 mb-0"
+                                       href="/models/statistic/?action=train">refresh</a>
                                 </div>
                             </div>
                         </form>
@@ -349,20 +368,36 @@
             <div class="col-xl-12 col-lg-12 col-md-12 d-flex flex-column mx-auto">
                 <div class="card card-plain">
                     <div class="card-body">
-                        <form role="form text-left" method="post" action="./" enctype="multipart/form-data">
+                        <form role="form text-left" method="post" action="/models/statistic/"
+                              enctype="multipart/form-data">
                             <h6>Prediction models</h6>
                             <div class="col-12 row">
                                 <div class="col-2 mb-3">
-                                    <select name="algo" class="form-control" placeholder="algorithms">
-                                        <option value="RF">Random forest</option>
-                                    </select>                                </div>
+                                    <label for="predict">Models</label><select id="predict" name="algo"
+                                                                               class="form-control"
+                                                                               placeholder="algorithms">
+                                    <option value="" selected disabled>Select algorithm</option>
+                                    {% if trained %}
+                                        {% for algo in trained %}
+                                            <option value="{{ algo.algoName }}">{{ algo.algoName }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select></div>
                                 <div class="col-6 mb-3">
+                                    <label for="question">your question</label>
                                     <input type="hidden" name="action" value="predict">
-                                    <input type="text" name="question" class="form-control" placeholder="your question" aria-label="your question" aria-describedby="text-addon">
+                                    <input id="question" type="text" name="question" class="form-control"
+                                           placeholder="your question" aria-label="your question"
+                                           aria-describedby="text-addon">
                                 </div>
-                                <div class="col-4 text-center">
-                                    <button  onclick="{this.disabled}" type="submit" class="btn bg-gradient-info w-50 mb-0">Check</button>
+                                <div class="col-4 text-center" style="margin-top: 30px;">
+                                    <button id="btnpredict" disabled="true" onclick="{this.disabled}" type="submit"
+                                            class="btn bg-gradient-info w-50 mb-0">Check
+                                    </button>
+                                    <a class="btn bg-gradient-secondary w-35 mb-0"
+                                       href="/models/statistic/?action=train">refresh</a>
                                 </div>
+
                             </div>
                         </form>
                     </div>
@@ -660,10 +695,29 @@
     }
 </script>
 <!-- Github buttons -->
+<script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
 
 <script src="{% static 'assets/js/soft-ui-dashboard.min.js?v=1.0.2' %}"></script>
+
+<script>
+    $("#predict").on('click', function () {
+        if ($(this).val() == "")
+            $("#btnpredict").attr('disabled', true)
+        else
+            $("#btnpredict").attr('disabled', false)
+    });
+    $("#train").on('click', function () {
+        if ($(this).val() == "")
+            $("#btntrain").attr('disabled', true)
+        else
+            $("#btntrain").attr('disabled', false)
+    });
+</script>
+
+</script>
 </body>
 
 </html>

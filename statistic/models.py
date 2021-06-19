@@ -8,11 +8,11 @@ class statistic(models.Model):
     completed = models.BooleanField(default=False, blank=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
     algoName = models.CharField(max_length=255)
-    trainSize = models.IntegerField()
-    testSize = models.IntegerField()
-    Score = models.IntegerField()
-    NLPmethode = models.CharField(max_length=255)
-    details = models.CharField(max_length=255)
+    trainSize = models.IntegerField(blank=True)
+    testSize = models.IntegerField(blank=True)
+    Score = models.IntegerField(blank=True)
+    NLPmethode = models.CharField(max_length=255, blank=True)
+    details = models.CharField(max_length=255, blank=True)
 
 
 def __str__(self):

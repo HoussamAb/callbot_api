@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('models/', include("statistic.urls")),
     path('api/', include("api.urls")),
+    path('jsonapi/', include("jsonapi.urls"))
 ]
