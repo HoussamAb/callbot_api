@@ -22,8 +22,6 @@ class FilesManager:
     def loadDataSet(self, fullpath):
         self._allDataSet = pd.read_csv(fullpath, delimiter=";", encoding='ansi')
         return self._allDataSet
-
-
 #               NLP PROCESSING
 class NlpProcessing:
     stopword = nltk.corpus.stopwords.words('french')  # All frensh Stopwords
@@ -36,8 +34,6 @@ class NlpProcessing:
         # text = [ps.stem(word) for word in tokens if word not in stopword]
         # text = [wn.lemmatize(word) for word in tokens]
         return text
-
-
 #               SPLIT DATA
 class SplitDataset:
     _testData = {}
@@ -62,8 +58,6 @@ class SplitDataset:
 
     def getTest(self):
         return self._testData
-
-
 #                   TRAIN MODEL
 class TrainModel:
     _countvectorizer = CountVectorizer(ngram_range=(2, 2), analyzer=NlpProcessing.clean_text)
@@ -87,10 +81,8 @@ class TrainModel:
         pipe = self.initPipeline()
         model = pipe.fit(X=self.datasetx, y=self.datasety)
         return model
-
-
 #                   BUILD METRICS
-class metrics:
+class Metrics:
     _model = None
     _datatest = None
     _predicted = None
@@ -118,8 +110,6 @@ class metrics:
             self._predicted = self._model.predict(self._datatest['test_x'])
         print("la precision sur valeurs prédites égale : %.3f %%" % (
                     accuracy_score(self._datatest['test_y'], self._predicted) * 100))
-
-
 #                   Test Sur Fichier INBENTA
 class MakeTest:
     df1 = None

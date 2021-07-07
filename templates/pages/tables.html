@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
+{% load static %}
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {% load static %}
-
-
-    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'assets/img/apple-icon.png' %}">
-    <link rel="icon" type="image/png" href="{% static 'assets/img/favicon.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <title>
         CallBot APi | ECA Assurance
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"/>
     <!-- Nucleo Icons -->
-
     <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet"/>
     <link href="{% static 'assets/css/nucleo-svg.css' %}" rel="stylesheet"/>
     <!-- Font Awesome Icons -->
@@ -66,7 +62,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  " href="/models/statistic">
+                <a class="nav-link  active" href="/models/statistic">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
                              xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -146,7 +142,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active " href="/models/statistic/?action=test">
+                <a class="nav-link  " href="/models/statistic/?action=test">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="20px" viewBox="0 0 40 40" version="1.1"
                              xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -317,9 +313,9 @@
                 <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                     <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a>
                     </li>
-                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
+                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Models</li>
                 </ol>
-                <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+                <h6 class="font-weight-bolder mb-0">List of models</h6>
             </nav>
             <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                 <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -442,143 +438,83 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-        <div class="col-12 row">
-            <div class="col-xl-12 col-lg-12 col-md-12 d-flex flex-column mx-auto">
-                <div class="card card-plain">
-                    {% comment %} <div class="card-header pb-0 text-left bg-transparent">
-                        <h3 class="font-weight-bolder text-info text-gradient">Welcome back</h3>
-                        <p class="mb-0">Enter your email and password to sign in</p>
-                    </div>{% endcomment %}
-                    <div class="card-body">
-                        <form id="newalgo" role="form text-left" method="post" action="/models/statistic/"
-                              enctype="multipart/form-data">
-                            <label><b>CREATE A TEST</b></label>
-                            <div class="col-12 row mb-3">
-                                <div class="col-6">
-                                    <input type="hidden" value="predictList" name="action">
-                                    <label for="algoselect">select algorithme</label>
-                                    <select id="algoselect" name="algo" class="form-control" placeholder="algorithms"
-                                            form="newalgo">
-                                        <option value="" selected disabled>select algorithm</option>
-                                        {% if trained %}
-                                            {% for algo in trained %}
-                                                <option value="{{ algo.algoName }}">{{ algo.algoName }}</option>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </select>
-
-                                </div>
-                                <div class="col-6">
-                                    <label for="datatest"> select test data</label>
-                                    <select id="datatest" name="datatest" class="form-control" placeholder="algorithms"
-                                            form="newalgo">
-                                        <option value="" selected disabled>select dataset of test</option>
-                                        {% if files %}
-                                            {% for file in files %}
-                                                <option value="{{ file.1 }}">{{ file.1 }}</option>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </select>
-                                </div>
-                                <div class=" col-12 text-center">
-                                    <button disabled="true" id="button" type="submit"
-                                            class="btn bg-gradient-warning w-100 mt-4 mb-0">validate
-                                    </button>
-                                </div>
-                            </div>
-
-                        </form>
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header pb-0">
+                        <h6>List of Models</h6>
                     </div>
-
-                </div>
-            </div>
-
-        </div>
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header pb-0 px-3">
-                    <h6 class="mb-0">results on : </h6>
-                </div>
-                <div class="card-body pt-4 p-3">
-                    <ul class="list-group">
-                        <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                            <div class="d-flex flex-column">
-                                {% if moyenne %}
-                                    <span class="mb-2 text-xs">Moyenne est : {{ moyenne }}</span>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center justify-content-center mb-0">
+                                <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Name
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        TrainSize
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        TesteSize
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                        Score
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                        methode
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                        details
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if data %}
+                                    {% for i in data %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex px-2">
+                                                    <div class="my-auto">
+                                                        <h6 class="mb-0 text-sm">{{ i.algoName }}</h6>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <p class="text-sm font-weight-bold mb-0">{{ i.trainSize }}</p>
+                                            </td>
+                                            <td>
+                                                <span class="text-xs font-weight-bold">{{ i.testSize }}</span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <span class="me-2 text-xs font-weight-bold">{{ i.Score }}%</span>
+                                                    <div>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-gradient-success"
+                                                                 role="progressbar" aria-valuenow="{{ i.Score }}"
+                                                                 aria-valuemin="0" aria-valuemax="100"
+                                                                 style="width: {{ i.Score }}%;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle">
+                                                <span class="text-xs font-weight-bold">{{ i.NLPmethode }}</span>
+                                            </td>
+                                            <td class="align-middle">
+                                                <span class="text-xs font-weight-bold">{{ i.details }}</span>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                 {% endif %}
-                                {% if tempsderep %}
-                                    <span class="mb-2 text-xs">La Moyenne de temps de réponses : {{ tempsderep.1 }} </span>
-                                    <span class="mb-2 text-xs">Le totale des tests :  {{ tempsderep.0 }} </span>
-                                {% endif %}
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="col-12 row">
-            <div class="col-xl-12 col-lg-12 col-md-12 d-flex flex-column mx-auto">
-                <div class="col-12">
-                    <div class="card mb-4">
-                        <div class="card-header pb-0">
-                            <h6>repport of test</h6>
-                        </div>
-                        <div class="card-body px-0 pt-0 pb-2">
-                            <div class="table-responsive p-0" id="datatable">
-                                {% comment %}{% if table %}{{ table }}{% endif %}{% endcomment %}
-
-                                <table class="table align-items-center mb-0">
-                                    <thead>
-                                    <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Questions individu
-                                        </th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Questions understood
-                                        </th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Respenses in db
-                                        </th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Respenses predicted by algorithm
-                                        </th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            time elapsed
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% if table %}
-                                        {% for column in table.data %}
-                                            <tr>
-                                                <td style="white-space:normal;">
-                                                    <p class=" text-secondary text-xs font-weight-bold mb-0">{{ column.0 }}</p>
-                                                </td>
-                                                <td style="white-space:normal;">
-                                                    <p class="text-secondary text-xs font-weight-bold mb-0">{{ column.2 }}</p>
-                                                </td>
-                                                <td style="white-space:normal;">
-                                                    <span class="text-secondary text-xs font-weight-bold">{{ column.3 }}</span>
-                                                </td>
-                                                <td style="white-space:normal;">
-                                                    <span class="text-secondary text-xs font-weight-bold">{{ column.4 }}</span>
-                                                </td>
-                                                <td style="white-space:normal;">
-                                                    <span class="text-secondary text-xs font-weight-bold">{{ column.5 }}</span>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    {% endif %}
-                                    </tbody>
-                                </table>
-                            </div>
-
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
         <footer class="footer pt-3">
             <div class="container-fluid">
@@ -686,168 +622,9 @@
     </div>
 </div>
 <!--   Core JS Files   -->
-<script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
-<script src="{% static 'assets/js/core/popper.min.js' %}"></script>
-<script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
-<script src="{% static 'assets/js/plugins/smooth-scrollbar.min.js' %}"></script>
-<script src="{% static 'assets/js/plugins/chartjs.min.js' %}"></script>
-<script src="{% static 'assets/js/plugins/Chart.extension.js' %}"></script>
-<script>
-    var ctx = document.getElementById("chart-bars").getContext("2d");
-
-    new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [{
-                label: "Sales",
-                tension: 0.4,
-                borderWidth: 0,
-                pointRadius: 0,
-                backgroundColor: "#fff",
-                data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
-                maxBarThickness: 6
-            },],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            legend: {
-                display: false,
-            },
-            tooltips: {
-                enabled: true,
-                mode: "index",
-                intersect: false,
-            },
-            scales: {
-                yAxes: [{
-                    gridLines: {
-                        display: false,
-                    },
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 500,
-                        beginAtZero: true,
-                        padding: 0,
-                        fontSize: 14,
-                        lineHeight: 3,
-                        fontColor: "#fff",
-                        fontStyle: 'normal',
-                        fontFamily: "Open Sans",
-                    },
-                },],
-                xAxes: [{
-                    gridLines: {
-                        display: false,
-                    },
-                    ticks: {
-                        display: false,
-                        padding: 20,
-                    },
-                },],
-            },
-        },
-    });
-
-    var ctx2 = document.getElementById("chart-line").getContext("2d");
-
-    var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-    gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
-    gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-    gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
-
-    var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-    gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
-    gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-    gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
-
-
-    new Chart(ctx2, {
-        type: "line",
-        data: {
-            labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [
-                {
-                    label: "Mobile apps",
-                    tension: 0.4,
-                    borderWidth: 0,
-                    pointRadius: 0,
-                    borderColor: "#cb0c9f",
-                    borderWidth: 3,
-                    backgroundColor: gradientStroke1,
-                    data: [0, 70, 0],
-                    maxBarThickness: 6
-
-                },
-                {
-                    label: "Websites",
-                    tension: 0.4,
-                    borderWidth: 0,
-                    pointRadius: 0,
-                    borderColor: "#3A416F",
-                    borderWidth: 3,
-                    backgroundColor: gradientStroke2,
-                    data: [0, 90, 0],
-                    maxBarThickness: 6
-
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            legend: {
-                display: false,
-            },
-            tooltips: {
-                enabled: true,
-                mode: "index",
-                intersect: false,
-            },
-            scales: {
-                yAxes: [{
-                    gridLines: {
-                        borderDash: [2],
-                        borderDashOffset: [2],
-                        color: '#dee2e6',
-                        zeroLineColor: '#dee2e6',
-                        zeroLineWidth: 1,
-                        zeroLineBorderDash: [2],
-                        drawBorder: false,
-                    },
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                        beginAtZero: true,
-                        padding: 10,
-                        fontSize: 11,
-                        fontColor: '#adb5bd',
-                        lineHeight: 3,
-                        fontStyle: 'normal',
-                        fontFamily: "Open Sans",
-                    },
-                },],
-                xAxes: [{
-                    gridLines: {
-                        zeroLineColor: 'rgba(0,0,0,0)',
-                        display: false,
-                    },
-                    ticks: {
-                        padding: 10,
-                        fontSize: 11,
-                        fontColor: '#adb5bd',
-                        lineHeight: 3,
-                        fontStyle: 'normal',
-                        fontFamily: "Open Sans",
-                    },
-                },],
-            },
-        },
-    });
-</script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
 <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -860,23 +637,7 @@
 <!-- Github buttons -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-
-<script src="{% static 'assets/js/soft-ui-dashboard.min.js' %}"></script>
-<script>
-    $("select").on('click', function () {
-        if ($(this).val() == "")
-            $("#button").attr('disabled', true)
-        else
-            $("#button").attr('disabled', false)
-    });
-    $("#file").on('change', function () {
-        if ($(this).val() == "")
-            $("#filebtn").attr('disabled', true)
-        else
-            $("#filebtn").attr('disabled', false)
-    });
-
-</script>
+<script src="{% static 'assets/js/soft-ui-dashboard.min.js?v=1.0.2' %}"></script>
 </body>
 
 </html>

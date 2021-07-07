@@ -31,8 +31,9 @@ class statistic(View):
                 onlyfiles = [f for f in listdir(self.datasetsPath) if isfile(join(self.datasetsPath, f))]
                 files = managefiles(onlyfiles)
                 filesTrain = [f for f in files if 'train' in f]
+                print(filesTrain)
                 testsizer = int(request.POST.get('testsize'))
-                df = Ml.FilesManager.loadDataSet(self, fullpath=self.datasetsPath + filesTrain[1])
+                df = Ml.FilesManager.loadDataSet(self, fullpath=self.datasetsPath + filesTrain[0][1])
                 split_data = Ml.SplitDataset(df)
                 split_data.split(testSize=testsizer, RandomStat=42)
                 if request.POST.get('algo') == "RandomForestClassifier100":
@@ -40,7 +41,7 @@ class statistic(View):
                     training = Ml.TrainModel(RandomForestClassifier(n_estimators=100), split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -63,7 +64,7 @@ class statistic(View):
                     training = Ml.TrainModel(RandomForestClassifier(n_estimators=200), split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -86,7 +87,7 @@ class statistic(View):
                     training = Ml.TrainModel(RandomForestClassifier(n_estimators=50), split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -109,7 +110,7 @@ class statistic(View):
                     training = Ml.TrainModel(KNeighborsClassifier(n_neighbors=5), split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -132,7 +133,7 @@ class statistic(View):
                     training = Ml.TrainModel(KNeighborsClassifier(n_neighbors=3), split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -155,7 +156,7 @@ class statistic(View):
                     training = Ml.TrainModel(MultinomialNB(), split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -178,7 +179,7 @@ class statistic(View):
                     training = Ml.TrainModel(BernoulliNB(), split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -201,7 +202,7 @@ class statistic(View):
                     training = Ml.TrainModel(CategoricalNB(), split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -224,7 +225,7 @@ class statistic(View):
                     training = Ml.TrainModel(DecisionTreeClassifier(), split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -248,7 +249,7 @@ class statistic(View):
                                              split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -271,7 +272,7 @@ class statistic(View):
                     training = Ml.TrainModel(SVC(), split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
@@ -296,7 +297,7 @@ class statistic(View):
                                              split_data.dataset["Questions"],
                                              split_data.dataset["Reponses"])
                     model = training.train()
-                    metric = Ml.metrics(model, split_data.getTest())
+                    metric = Ml.Metrics(model, split_data.getTest())
                     score = metric.modelScore()
                     tuple_objects = (model, score)
                     # Save tuple
