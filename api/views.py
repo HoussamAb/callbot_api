@@ -1,13 +1,13 @@
-from django.http import JsonResponse
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from api.models import api as apimodel
-from django.views import View
-import csv, io
+import csv
+import io
+
 from django.shortcuts import render
-from django.contrib import messages
-import jsonapi  # Create your views here.
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+
 import ML.MlProcessing as Ml
+from api.models import api as apimodel
 from statistic.models import statistic as Statmodel
 
 
@@ -146,9 +146,11 @@ class api(View):
         template = "pages/dashboard.html"
         # data = apimodel.objects.all()
         # prompt is a context variable that can have different values      depending on their context
+        models = Statmodel.objects.all()
         prompt = {
             'order': 'Order of the CSV should be Questions, responses',
-            'profiles': None,
+            'models': models,
+            'count': models[:4][::-1],
         }
         # GET request returns the value of the data with the specified key.
         return render(request, template, prompt)

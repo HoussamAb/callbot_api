@@ -1,13 +1,14 @@
-from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfTransformer
-from sklearn.feature_extraction.text import CountVectorizer
-import pandas as pd
+import re
+import string
+import time
+
 import nltk
 import numpy as np
-import string
-import re
-import time
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
 
 
 class FilesManager:
